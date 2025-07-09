@@ -64,7 +64,7 @@ public class UserService {
     }
 
     /**
-     * Retrieves a user by their email.
+     * Retrieves a user entity by their email. Used internally by other services.
      * @param email The email of the user.
      * @return The User entity if found.
      * @throws ResourceNotFoundException if the user is not found.
@@ -73,6 +73,19 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
+
+    /**
+     * Retrieves a user DTO by their email. This is the new method for AuthController.
+     * @param email The email of the user.
+     * @return The UserDTO if found.
+     * @throws ResourceNotFoundException if the user is not found.
+     */
+    public UserDTO getUserDTOByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+        return userMapper.toUserDTO(user);
+    }
+
 
     /**
      * Retrieves all users.
