@@ -9,6 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.main.dto.JwtAuthResponse;
 import com.example.main.dto.UserDTO;
@@ -22,14 +26,15 @@ import com.example.main.service.UserService;
 
 /**
  * REST Controller for user authentication and registration.
+ * This version works with Spring Security enabled (even if configured to permit all requests).
  */
 @RestController
 @RequestMapping("/api/v1/auth") // Base path for authentication endpoints
 public class AuthController {
 
     private final UserService userService;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService; // Re-introduced JwtService
+    private final AuthenticationManager authenticationManager; // Re-introduced AuthenticationManager
 
     public AuthController(UserService userService, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userService = userService;
@@ -65,6 +70,7 @@ public class AuthController {
 
     /**
      * Authenticates a user and returns a JWT token upon successful login.
+     * This method now performs actual authentication using AuthenticationManager.
      * @param request The DTO containing login credentials.
      * @return ResponseEntity with JwtAuthResponse containing the token and user info.
      * @throws BadCredentialsException if authentication fails.
@@ -105,3 +111,4 @@ public class AuthController {
         }
     }
 }
+
